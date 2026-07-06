@@ -1,0 +1,22 @@
+{
+  "animations": {
+    "runtimeDirectory": "./animations",
+    "fade": "/home/anshinshaju/IGOThemes/Default/fade.qml",
+    "sleep": "/home/anshinshaju/IGOThemes/Default/sleep.qml"
+  },
+
+  "timings": {
+    "idleStart": 0,
+
+    "fadeStart": 10,
+    "fadeDuration": 5,
+
+    "sleepStart": 20,
+    "sleepFadeIn": 5,
+
+    "sleepEnd": 30,
+    "sleepFadeOut": 5,
+
+    "lockTime": 40
+  }
+}
