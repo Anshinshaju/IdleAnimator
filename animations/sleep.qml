@@ -330,7 +330,7 @@ Window {
 
             id: boltRepeater
 
-            model: 60
+            model: 180
 
             Rectangle {
 
@@ -366,48 +366,117 @@ Window {
             }
         }
 
-        function generateStorm()
+        function generateBolt()
         {
-            activeSegments = 0
+            
 
-            var segments = 10 + Math.floor(Math.random()*16)
+            //--------------------------------------------------
+            // Weighted Lightning Length
+            //--------------------------------------------------
 
-            activeSegments = segments
+            var r = Math.random()
 
-            var x = Math.random()*width
+            var segments
 
-            var y = -80
-
-            for(var i=0;i<segments;i++)
+            if (r < 0.10)
             {
-                var item = boltRepeater.itemAt(i)
+                // Small strike (10%)
+                segments = 8 + Math.floor(Math.random() * 3)
+            }
+            else if (r < 0.30)
+            {
+                // Medium strike (20%)
+                segments = 11 + Math.floor(Math.random() * 4)
+            }
+            else if (r < 0.75)
+            {
+                // Large strike (45%)
+                segments = 15 + Math.floor(Math.random() * 6)
+            }
+            else
+            {
+                // Massive strike (25%)
+                segments = 21 + Math.floor(Math.random() * 5)
+            }
 
-                if(item===null)
+            
+
+            var startIndex = activeSegments
+
+            activeSegments += segments
+
+            var x = width * (0.2 + Math.random() * 0.6)
+            var y = -60
+
+            var angle = 0
+
+            for(var i = 0; i < segments; i++)
+            {
+                var item = boltRepeater.itemAt(startIndex + i)
+
+                if(item === null)
                     continue
 
-                var length = 40 + Math.random()*50
+                // ---------- Thickness ----------
+                var progress = i / segments
 
-                var angle = -30 + Math.random()*60
+                item.width = Math.max(1.5, 5 - progress * 3.5)
 
-                item.width = 4
+                // ---------- Length ----------
+                var length = 45 + Math.random() * 35
+
                 item.height = length
+
+                // ---------- Small random turn ----------
+                angle += (Math.random() - 0.5) * 20
+
+                if(angle > 30)
+                    angle = 30
+
+                if(angle < -30)
+                    angle = -30
 
                 item.rotation = angle
 
                 item.x = x
                 item.y = y
 
-                x += Math.sin(angle*Math.PI/180)*length
-                y += Math.cos(angle*Math.PI/180)*length
+                // ---------- Advance ----------
+                x += Math.sin(angle * Math.PI / 180.0) * length
+                y += Math.cos(angle * Math.PI / 180.0) * length
 
-                if(x<0)
-                    x=0
+                // Keep inside screen
+                if(x < 20)
+                    x = 20
 
-                if(x>width)
-                    x=width
+                if(x > width - 20)
+                    x = width - 20
+
+                if(y > height)
+                    break
             }
 
             hideLightning.restart()
+        }
+        function generateStorm()
+        {
+            var r = Math.random()
+
+            var boltCount
+
+            if (r < 0.40)
+                boltCount = 1
+            else if (r < 0.85)
+                boltCount = 2
+            else if (r < 0.95)
+                boltCount = 3
+            else
+                boltCount = 4
+
+            for (var i = 0; i < boltCount; i++)
+            {
+                generateBolt()
+            }
         }
     }
     
