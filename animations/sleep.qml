@@ -367,7 +367,7 @@ Window {
             }
         }
 
-        function generateBolt()
+        function generateBolt(startX)
         {
             var branchPoints = []
 
@@ -394,7 +394,7 @@ Window {
 
             activeSegments = Math.max(activeSegments, nextFreeSegment)
 
-            var x = width * (0.3 + Math.random() * 0.4)
+            var x = startX
             var y = -60
 
             var angle = 0
@@ -484,6 +484,7 @@ Window {
         }
         function generateStorm()
         {
+            var usedX = []
             activeSegments = 0
             nextFreeSegment = 0
             var r = Math.random()
@@ -499,9 +500,27 @@ Window {
             else
                 boltCount = 4
 
+
             for (var i = 0; i < boltCount; i++)
             {
-                generateBolt()
+                var startX
+                var valid
+
+                do {
+                    valid = true
+                    startX = width * (0.2 + Math.random() * 0.6)
+
+                    for (var i = 0; i < usedX.length; i++) {
+                        if (Math.abs(startX - usedX[i]) < 150) {   // ≈ 2 cm on many desktop displays
+                            valid = false
+                            break
+                        }
+                    }
+                } while (!valid)
+
+                usedX.push(startX)
+
+                generateBolt(startX)
             }
         }
         function generateBranch(x, y, parentAngle)
