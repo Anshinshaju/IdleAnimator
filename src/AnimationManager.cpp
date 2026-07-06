@@ -66,8 +66,13 @@ void AnimationManager::launchFade()
 void AnimationManager::launchSleep()
 {
     std::thread([]()
-    {
-        std::system("qmlscene6 animations/sleep.qml");
+        {
+            std::string command =
+        "qmlscene6 animations/sleep.qml " +
+        std::to_string(config.getSleepFadeIn()) + " " +
+        std::to_string(config.getSleepFadeOut());
+
+        std::system(command.c_str());
     }).detach();
 }
 
