@@ -19,7 +19,7 @@ Window {
     //==================================================
 
     property int secondsSinceThunder: 0
-    
+  
 
     //==================================================
     // FUNCTIONS
@@ -325,12 +325,13 @@ Window {
         z: 1000
 
         property int activeSegments: 0
+        property int nextFreeSegment: 0
 
         Repeater {
 
             id: boltRepeater
 
-            model: 180
+            model: 220
 
             Rectangle {
 
@@ -368,7 +369,7 @@ Window {
 
         function generateBolt()
         {
-            
+            var branchPoints = []
 
             //--------------------------------------------------
             // Weighted Lightning Length
@@ -379,87 +380,112 @@ Window {
             var segments
 
             if (r < 0.10)
-            {
-                // Small strike (10%)
                 segments = 8 + Math.floor(Math.random() * 3)
-            }
             else if (r < 0.30)
-            {
-                // Medium strike (20%)
                 segments = 11 + Math.floor(Math.random() * 4)
-            }
             else if (r < 0.75)
-            {
-                // Large strike (45%)
                 segments = 15 + Math.floor(Math.random() * 6)
-            }
             else
-            {
-                // Massive strike (25%)
                 segments = 21 + Math.floor(Math.random() * 5)
-            }
 
-            
+            var startIndex = nextFreeSegment
 
-            var startIndex = activeSegments
+            nextFreeSegment += segments
 
-            activeSegments += segments
+            activeSegments = Math.max(activeSegments, nextFreeSegment)
 
-            var x = width * (0.2 + Math.random() * 0.6)
+            var x = width * (0.3 + Math.random() * 0.4)
             var y = -60
 
             var angle = 0
 
-            for(var i = 0; i < segments; i++)
+            for (var i = 0; i < segments; i++)
             {
                 var item = boltRepeater.itemAt(startIndex + i)
 
-                if(item === null)
-                    continue
+                if (item === null)
+                    break
 
-                // ---------- Thickness ----------
+                //--------------------------------------------------
+                // Thickness
+                //--------------------------------------------------
+
                 var progress = i / segments
 
                 item.width = Math.max(1.5, 5 - progress * 3.5)
 
-                // ---------- Length ----------
+                //--------------------------------------------------
+                // Length
+                //--------------------------------------------------
+
                 var length = 45 + Math.random() * 35
 
                 item.height = length
 
-                // ---------- Small random turn ----------
+                //--------------------------------------------------
+                // Smooth Direction
+                //--------------------------------------------------
+
                 angle += (Math.random() - 0.5) * 20
 
-                if(angle > 30)
+                if (angle > 30)
                     angle = 30
 
-                if(angle < -30)
+                if (angle < -30)
                     angle = -30
 
                 item.rotation = angle
 
+                // ******** THESE WERE MISSING ********
                 item.x = x
                 item.y = y
+                // ***********************************
 
-                // ---------- Advance ----------
+                if (i > segments * 0.35 && Math.random() < 0.18)
+                {
+                    branchPoints.push({
+                        x: x,
+                        y: y,
+                        angle: angle
+                    })
+                }
+
+                //--------------------------------------------------
+                // Advance
+                //--------------------------------------------------
+
                 x += Math.sin(angle * Math.PI / 180.0) * length
                 y += Math.cos(angle * Math.PI / 180.0) * length
 
-                // Keep inside screen
-                if(x < 20)
+                if (x < 20)
                     x = 20
 
-                if(x > width - 20)
+                if (x > width - 20)
                     x = width - 20
 
-                if(y > height)
+                if (y > height)
                     break
+            }
+
+            //--------------------------------------------------
+            // Generate Branches
+            //--------------------------------------------------
+
+            for (var i = 0; i < branchPoints.length; i++)
+            {
+                generateBranch(
+                    branchPoints[i].x,
+                    branchPoints[i].y,
+                    branchPoints[i].angle
+                )
             }
 
             hideLightning.restart()
         }
         function generateStorm()
         {
+            activeSegments = 0
+            nextFreeSegment = 0
             var r = Math.random()
 
             var boltCount
@@ -478,7 +504,43 @@ Window {
                 generateBolt()
             }
         }
+        function generateBranch(x, y, parentAngle)
+        {
+            var branchSegments = 3 + Math.floor(Math.random() * 6)
+
+            var branchStart = nextFreeSegment
+
+            nextFreeSegment += branchSegments
+
+            activeSegments = Math.max(activeSegments, nextFreeSegment)
+
+            var angle = parentAngle + (Math.random() < 0.5 ? -35 : 35)
+
+            for (var i = 0; i < branchSegments; i++)
+            {
+                var item = boltRepeater.itemAt(branchStart + i)
+
+                if (item === null)
+                    break
+
+                var length = 30 + Math.random() * 30
+
+                item.width = Math.max(1.0, 3.0 - i * 0.3)
+                item.height = length
+
+                angle += (Math.random() - 0.5) * 15
+
+                item.rotation = angle
+
+                item.x = x
+                item.y = y
+
+                x += Math.sin(angle * Math.PI / 180) * length
+                y += Math.cos(angle * Math.PI / 180) * length
+
+                if (x < 0 || x > width || y > height)
+                    break
+            }
+        }
     }
-    
-    
 }
