@@ -2,7 +2,7 @@
   "animations": {
     "runtimeDirectory": "./animations",
     "fade": "/home/anshinshaju/IGOThemes/Default/fade.qml",
-    "sleep": "/home/anshinshaju/IGOThemes/Default/sleep.qml"
+    "sleep": "/home/anshinshaju/Projects/IdleAnimator/animations/sleep.qml"
   },
 
   "timings": {

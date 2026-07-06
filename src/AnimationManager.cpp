@@ -21,10 +21,10 @@ bool AnimationManager::prepareAnimations()
     fs::create_directories(runtimeDir);
 
     // Delete everything inside it
-    for (const auto& entry : fs::directory_iterator(runtimeDir))
-    {
-        fs::remove_all(entry.path());
-    }
+    //for (const auto& entry : fs::directory_iterator(runtimeDir))
+    //{
+   //     fs::remove_all(entry.path());
+   // }
 
     bool success = true;
 
@@ -56,21 +56,19 @@ bool AnimationManager::prepareAnimations()
 }
 
 void AnimationManager::launchFade()
-{
+{/*
     std::thread([]()
     {
         std::system("qmlscene6 animations/fade.qml");
-    }).detach();
+    }).detach();*/
 }
 
 void AnimationManager::launchSleep()
 {
-    std::thread([]()
+    std::thread([this]()
         {
             std::string command =
-        "qmlscene6 animations/sleep.qml " +
-        std::to_string(config.getSleepFadeIn()) + " " +
-        std::to_string(config.getSleepFadeOut());
+        "qmlscene6 animations/sleep.qml " ;
 
         std::system(command.c_str());
     }).detach();
