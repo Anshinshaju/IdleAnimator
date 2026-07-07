@@ -23,9 +23,6 @@ void Timeline::start()
 
     animationManager.prepareAnimations();
 
-    animationManager.launchFade();
-    animationManager.launchSleep();
-
     int seconds = 0;
 
     while (running)
@@ -37,21 +34,27 @@ void Timeline::start()
         if (seconds == config.getFadeStart())
         {
             std::cout << "Fade Start\n";
+            //animationManager.launchFade();
         }
 
         if (seconds == config.getSleepStart())
         {
             std::cout << "Sleep Start\n";
+            animationManager.launchSleep();
         }
 
         if (seconds == config.getSleepEnd())
         {
             std::cout << "Sleep End\n";
+            animationManager.stopSleep();
         }
 
         if (seconds == config.getLockTime())
         {
             std::cout << "Lock Screen\n";
+
+            animationManager.stopSleep();
+            //animationManager.stopFade();
 
             LockScreen locker;
             locker.lock();
@@ -64,7 +67,8 @@ void Timeline::start()
 
 void Timeline::stop()
 {
-    running=false;
+    running = false;
+
     animationManager.stopAll();
 
     std::cout << "Timeline Stopped\n";

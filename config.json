@@ -8,15 +8,15 @@
   "timings": {
     "idleStart": 0,
 
-    "fadeStart": 10,
-    "fadeDuration": 5,
+    "fadeStart": 240,
+    "fadeDuration": 60,
 
-    "sleepStart": 20,
-    "sleepFadeIn": 5,
+    "sleepStart": 300,
+    "sleepFadeIn": 20,
 
-    "sleepEnd": 30,
-    "sleepFadeOut": 5,
+    "sleepEnd": 540,
+    "sleepFadeOut": 60,
 
-    "lockTime": 40
+    "lockTime": 600
   }
 }

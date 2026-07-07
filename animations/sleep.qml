@@ -116,7 +116,7 @@ Window {
 
         anchors.fill: parent
 
-        source: "../assets/back1.png"
+        source: "/home/anshinshaju/Projects/IdleAnimator/assets/back1.png"
 
         fillMode: Image.PreserveAspectCrop
 

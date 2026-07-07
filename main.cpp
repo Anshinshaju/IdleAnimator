@@ -8,7 +8,7 @@
 
 int main()
 {
-    Config config("config.json");
+    Config config("/home/anshinshaju/Projects/IdleAnimator/config.json");
 
     if (!config.load())
     {
