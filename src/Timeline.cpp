@@ -34,14 +34,14 @@ void Timeline::start()
         if (seconds == config.getFadeStart())
         {
             std::cout << "Fade Start\n";
-            //animationManager.launchFade();
+            animationManager.launchFade();
         }
 
         if (seconds == config.getSleepStart())
         {
             std::cout << "Sleep Start\n";
             animationManager.launchSleep();
-        }
+        }   animationManager.stopFade();
 
         if (seconds == config.getSleepEnd())
         {

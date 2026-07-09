@@ -14,8 +14,8 @@
     "sleepStart": 300,
     "sleepFadeIn": 20,
 
-    "sleepEnd": 540,
-    "sleepFadeOut": 60,
+    "sleepEnd": 600,
+    "sleepFadeOut": 0,
 
     "lockTime": 600
   }

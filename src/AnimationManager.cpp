@@ -20,7 +20,7 @@ bool AnimationManager::prepareAnimations()
     // Create runtime directory if it doesn't exist
     fs::create_directories(runtimeDir);
 
-    // Delete everything inside it
+     //Delete everything inside it
     //for (const auto& entry : fs::directory_iterator(runtimeDir))
     //{
    //     fs::remove_all(entry.path());
@@ -56,11 +56,11 @@ bool AnimationManager::prepareAnimations()
 }
 
 void AnimationManager::launchFade()
-{/*
+{
     std::thread([]()
     {
         std::system("qmlscene6 animations/fade.qml");
-    }).detach();*/
+    }).detach();
 }
 
 void AnimationManager::launchSleep()
